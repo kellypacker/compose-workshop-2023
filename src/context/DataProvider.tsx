@@ -1,4 +1,5 @@
 // import { useState } from 'react';
+import { useState } from 'react';
 import StoreContext from '~/context/store';
 import type { Book, Swag } from '~/types/interfaces';
 
@@ -7,12 +8,19 @@ interface Props {
 }
 
 function StoreProvider({ children }: Props) {
-  const books = [] as Book[];
+  const [books, setBooks] = useState<Book[]>([]);
+
   const swag = [] as Swag[];
 
-  const fetchBooks = async () => {};
+  const fetchBooks = async (id:string = '') => {
+    if (books.length <= 1) {
+      const response = await fetch(`/api/books/${id}`);
+      const data = await response.json();
+      setBooks(Array.isArray(data) ? data : [data]);
+    }
+  };
 
-  const fetchSwag = async () => {};
+  const fetchSwag = async () => { };
 
   return (
     <StoreContext.Provider
